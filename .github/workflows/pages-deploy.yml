@@ -53,7 +53,7 @@ jobs:
 
       - name: Build assets (JS/CSS)
         run: |
-          npm ci
+          npm install
           npm run build
 
       # htmlproofer is in the :test group; ensure it's installed
