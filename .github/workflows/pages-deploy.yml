@@ -45,6 +45,23 @@ jobs:
           ruby-version: 3.3
           bundler-cache: true
 
+      # Build theme assets (Bootstrap vendors + JS bundles)
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Build assets (JS/CSS)
+        run: |
+          npm ci
+          npm run build
+
+      # htmlproofer is in the :test group; ensure it's installed
+      - name: Install test gems
+        run: |
+          bundle config set with 'test'
+          bundle install --jobs 4 --retry 3
+
       - name: Build site
         run: bundle exec jekyll b -d "_site${{ steps.pages.outputs.base_path }}"
         env:
