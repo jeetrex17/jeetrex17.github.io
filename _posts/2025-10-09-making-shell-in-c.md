@@ -81,7 +81,7 @@ commands like ls , cat , grep , python , -l and all are external programs  these
 
 A way to check is to use `type`
 
-![types command ](/assets/images/types_command_example.png)
+![types command ](../assets/images/types_command_example.png)
 
 ## Life cycle of an shell 
 
