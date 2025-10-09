@@ -23,7 +23,7 @@ making all work is done by kernel , shell is just an interface.
 there are diff types of shells here are few examples :
 - Bourne Again SHell (**Bash**) — [gnu.org](https://www.gnu.org/software/bash/)
 - Z shell (**Zsh**) —  [zsh.org](https://www.zsh.org/)
-- Friendly Interactive SHell (**fish**) — [fishshell.com+1](https://fishshell.com/)
+- Friendly Interactive SHell (**fish**) — [fishshell.com](https://fishshell.com/)
 - Korn Shell (**ksh**) — [kornshell.com](https://kornshell.com/)
 - C Shell / TENEX C Shell (**csh / tcsh**) — [tcsh.org](https://www.tcsh.org/)
 - PowerShell — [learn.microsoft.com](https://learn.microsoft.com/en-us/powershell/)
@@ -70,9 +70,9 @@ After the child process is finished the kernel itself does the following
 - Shell gets the child’s **exit status** (success/failure).
 - Shell continues and shows a prompt.
 
-> [!NOTE]
-> - If you don’t call `wait()`, the child becomes a **zombie process** (terminated but not cleaned up).
+> - If you don't call `wait()`, the child becomes a zombie process (terminated but not cleaned up).
 > - Shell uses `wait()` to avoid zombies.
+{: .prompt-info }
 
 ##### Q.) are all this wait() , ls , cd and all builtin commands ?
 No not all are few very basic commands are only builtin like : cd , exit , fork() , wait() , that command prompt $ or > 
