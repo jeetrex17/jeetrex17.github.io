@@ -107,6 +107,6 @@ we aren't making an crazy shell with plugins and configs and all we are making a
 
 here below is the basic flow chart for the main loop 
 
-![flowchart for Main loop](/assets/images/FLow_chart_mini_shell,png)
+![flowchart for Main loop](/assets/images/FLow_chart_mini_shell.png)
 
 
