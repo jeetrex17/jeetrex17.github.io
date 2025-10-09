@@ -120,11 +120,11 @@ we are making this loop so that during this loop we can handle any commands in 3
 Basic code : 
 
 ```c
-int main(int argc, char **argv) { 
+int main(int argc, char **argv) {  
     // We can load config files here later (e.g., read ~/.jeetrc)
     // For now, keep it simple—no files, just pure loop vibes
 
-    jeet_loop();  // Kick off the shell loop
+    jeet_loop();  
 
-    return EXIT_SUCCESS;  
+    return EXIT_SUCCESS;
 }
