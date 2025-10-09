@@ -93,4 +93,20 @@ this keeps it running till user exits it , its mainly parses the commands user t
 creates child process for commands using `fork()`, also waits for child process to get complete.
 
 #### 3. Terminate 
-exits the shell , free memory and resources like release buffers , close open files, etc 
+exits the shell , free memory and resources like release buffers , close open files, etc
+
+
+## Planning the Mini Shell
+we aren't making an crazy shell with plugins and configs and all we are making an MVP to learn concepts and all so we will keep things minimal, here we will make an basic plan of our shell what all it should have as as MVP , this of it as an overview 
+
+- **Display prompt** : in this we are gonna make that $ or > sign or prompt like yourshell> , so that user know this is where he has to write the commands
+- **Read inputs** : i think this is self explanatory because like if it cannot read the command then how will it executes it , normally we can use fgets() or readline() but we wont we will implement our own read_line() function for learning purposes.
+- **Parse Input** : split the input commands and arguments for example `ls -l /home` here ls is the command and the -l, /home are the arguments so we need to split them and parses it
+- **Handle Builtin Commands** : we already discussed there are two types of commands builtin and external , here we will focus on the builtin commands like cd , exit etc etc 
+- **Handle external commands** : I think it is self explanatory
+
+here below is the basic flow chart for the main loop 
+
+![flowchart for Main loop](/assets/images/FLow_chart_mini_shell,png)
+
+
