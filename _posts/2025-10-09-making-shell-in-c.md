@@ -109,4 +109,22 @@ here below is the basic flow chart for the main loop
 
 ![flowchart for Main loop](/assets/images/FLow_chart_mini_shell.png)
 
+## Basic loop of a shell
+now that we are talked a lot about basic stuffs and planning and all that now, lets get into actual coding part , firstly we will make an main loop for out shell 
 
+we are making this loop so that during this loop we can handle any commands in 3 steps :
+- Read 
+- parse 
+- Executes
+
+Basic code : 
+
+```c
+int main(int argc, char **argv) { 
+    // We can load config files here later (e.g., read ~/.jeetrc)
+    // For now, keep it simple—no files, just pure loop vibes
+
+    jeet_loop();  // Kick off the shell loop
+
+    return EXIT_SUCCESS;  
+}
