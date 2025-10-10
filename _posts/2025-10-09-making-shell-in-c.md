@@ -117,10 +117,41 @@ we are making this loop so that during this loop we can handle any commands in 3
 - parse 
 - Executes
 
-```c
+
+```cpp
 int main(int argc, char **argv)
 {
-    // We can load config files here later (e.g., read -/jectr)
     jeet_loop();
     return EXIT_SUCCESS;
 }
+```
+
+
+this if like our main function its pretty basic , still let me break it down 
+
+`int argc` is the count of arguments which will be passed , example if you did ls , the argc is 1 , but if you did `ls -l /home` then its 3 , think why ?
+and now char \*\*argv its an double pointer , why double because argv is an arry of strings not char , if it was char then *argv would have been sufice
+
+```
+argv → [ptr0] [ptr1] [ptr2] [NULL]
+        ↓      ↓      ↓
+        "ls"   "-l"   "/home"
+```
+
+
+here is Memory Layout Visualization for `ls -l /home`
+
+
+```
+Memory Layout:
+──────────────────────────────────────────────────────────
+argv (address: 0x1000)
+  │
+  ├─► argv[0] (address: 0x2000) ──► ['l' 's' '\0']
+  │
+  ├─► argv[1] (address: 0x3000) ──► ['-' 'l' '\0']
+  │
+  ├─► argv[2] (address: 0x4000) ──► ['/' 'h' 'o' 'm' 'e' '\0']
+  │
+  └─► argv[3] = NULL
+```
