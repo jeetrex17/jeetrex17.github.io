@@ -118,7 +118,6 @@ we are making this loop so that during this loop we can handle any commands in 3
 - Executes
 
 ```c
-```c
 int main(int argc, char **argv)
 {
     // We can load config files here later (e.g., read -/jectr)
