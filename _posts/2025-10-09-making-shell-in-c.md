@@ -187,5 +187,12 @@ void jeet_loop(void)
 }
 ```cpp
 
-
 ```
+
+Here we are using an simple do while and making sure our shell keeps saying > or $ so that user knows shell is active , then we are simply reading the input of user via jeet_read_line and then tokiniszing it using jeet_split_line its like separating command string into program and arguments and then executing it , this loop is fairly simple and we are and then we are freeing the memory used via free() this step is very important , if you don't free it , it can cause memory leaks 
+
+Example of memory leak , lets say you allocated 1MB and then never free it and it is inside an loop then it will keep adding 1MB each time thus consuming all memory and making system slower. hence its best practice to free the memory.
+
+
+
+
