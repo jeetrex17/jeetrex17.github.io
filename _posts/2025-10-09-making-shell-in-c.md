@@ -2,9 +2,9 @@
 title: "Building a simple Shell in C"
 date: 2025-10-09
 categories: [C, Systems]
-tags: [shell, c, parsing, fork, exec, linux]
+tags: [shell, c, fork, exec, linux]
 layout: post
-description: "Step-by-step guide to implement a simple Unix-like shell in C covering parsing, process control, pipes and redirection."
+description: "Step-by-step guide to implement a simple Unix-like shell in C."
 ---
 In this i am learning how to make an mini shell using c , i have followed this [article](https://brennan.io/2015/01/16/write-a-shell-in-c/) by [Stephen Brennan](https://brennan.io/) 
 
@@ -127,7 +127,7 @@ int main(int argc, char **argv)
 ```
 
 
-this if like our main function its pretty basic , still let me break it down 
+Tis if like our main function its pretty basic , still let me break it down 
 
 `int argc` is the count of arguments which will be passed , example if you did ls , the argc is 1 , but if you did `ls -l /home` then its 3 , think why ?
 and now char \*\*argv its an double pointer , why double because argv is an arry of strings not char , if it was char then *argv would have been sufice
@@ -154,4 +154,38 @@ argv (address: 0x1000)
   ├─► argv[2] (address: 0x4000) ──► ['/' 'h' 'o' 'm' 'e' '\0']
   │
   └─► argv[3] = NULL
+```
+
+
+Now lets think why did we use `char **argv` only we could have also used `char *argv[]` and that an question for yourself to figure out.
+( its same you can use it but still do once think)
+
+And then we have our main jeet_loop() and return statement that is , now lets move onto the loop part 
+
+##### Now lets discus the Main loop `jeet_loop` 
+Loop is the heart of this mini shell becomes it is what keep running it whole like keeps prompting that $ or > , reading lines , parsing etc.
+first here is the code for it then we will break it down in detail
+
+```cpp
+
+```
+void jeet_loop(void)
+{
+  char *line;
+  char **args;
+  int status;
+
+  do {
+    printf("> ");
+    line = jeet_read_line();
+    args = jeet_split_line(line);
+    status = jeet_execute(args);
+
+    free(line);
+    free(args);
+  } while (status);
+}
+```cpp
+
+
 ```
