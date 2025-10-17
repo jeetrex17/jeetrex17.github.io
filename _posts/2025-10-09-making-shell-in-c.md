@@ -166,9 +166,7 @@ And then we have our main jeet_loop() and return statement that is , now lets mo
 Loop is the heart of this mini shell becomes it is what keep running it whole like keeps prompting that $ or > , reading lines , parsing etc.
 first here is the code for it then we will break it down in detail
 
-```cpp
-
-```
+```c
 void jeet_loop(void)
 {
   char *line;
@@ -185,8 +183,6 @@ void jeet_loop(void)
     free(args);
   } while (status);
 }
-```cpp
-
 ```
 
 Here we are using an simple do while and making sure our shell keeps saying > or $ so that user knows shell is active , then we are simply reading the input of user via jeet_read_line and then tokiniszing it using jeet_split_line its like separating command string into program and arguments and then executing it , this loop is fairly simple and we are and then we are freeing the memory used via free() this step is very important , if you don't free it , it can cause memory leaks 
@@ -199,7 +195,6 @@ here we are gonna make an function which reads line as the user inputs it we gon
 
 So , it will be like we dont know how long is the command user is gonna type so we are first gonna allocate an memory block and if he exceeds that then we reallocate more memory to it 
 
-```> [!CAUTION]
 ```c 
 char *read_jeet_line(void)
 {
@@ -241,14 +236,9 @@ char *read_jeet_line(void)
 }
 ```
 
-
-```
-```
-```
-
 we have an buffer as pointer which points to the memory where the text is getting stored , and the memory allocation is done by malloc , the postion is just for keeping track of charaters , then we have an infite loop where we are getting each charaters and why is c integer ?? its coz EOF is -1 so to check if we reached EOF ( end of file ) thus we are using int.
 
-```c 
+```cpp
 if (!buffer) {
     fprintf(stderr, "Jeet: allocation error\n");
     exit(EXIT_FAILURE);
@@ -257,8 +247,8 @@ if (!buffer) {
 
 what is this check ?? its like checking if system is not out of memory meaning no more memory to allocate and then buffer will be NULL and thus !NULL is true it will say allocation error and exit.
 
-```> [!CAUTION]
-```c
+
+```cpp
 // If we hit EOF, replace it with a null character and return.
     if (c == EOF || c == '\n') {
       buffer[position] = '\0';
@@ -270,20 +260,17 @@ what is this check ?? its like checking if system is not out of memory meaning n
 
 
 ```
-```
 
 This part of code is for check EOF or new line , it is fairly simple , if it is EOF or \n then place an null terminator (\0) at the end of the sting which we have built , this is like an special charater which doesnt print but its an way to tell C that this is the end of sting
 
-```c 
+```cpp
 // If we have exceeded the buffer, reallocate.
-    if (position >= bufsize) {
-      bufsize += LSH_RL_BUFSIZE;
-      buffer = realloc(buffer, bufsize);
-      if (!buffer) {
-        fprintf(stderr, "Jeet: allocation error\n");
-        exit(EXIT_FAILURE);
-      }
-    }
+if (position >= bufsize) {
+  bufsize += LSH_RL_BUFSIZE;
+  buffer = realloc(buffer, bufsize);
+  if (!buffer) {
+    fprintf(stderr, "Jeet: allocation error\n");
+    exit(EXIT_FAILURE);
   }
 }
 ```
