@@ -238,7 +238,7 @@ char *read_jeet_line(void)
 
 we have an buffer as pointer which points to the memory where the text is getting stored , and the memory allocation is done by malloc , the postion is just for keeping track of charaters , then we have an infite loop where we are getting each charaters and why is c integer ?? its coz EOF is -1 so to check if we reached EOF ( end of file ) thus we are using int.
 
-```cpp
+```c
 if (!buffer) {
     fprintf(stderr, "Jeet: allocation error\n");
     exit(EXIT_FAILURE);
@@ -248,7 +248,7 @@ if (!buffer) {
 what is this check ?? its like checking if system is not out of memory meaning no more memory to allocate and then buffer will be NULL and thus !NULL is true it will say allocation error and exit.
 
 
-```cpp
+```c
 // If we hit EOF, replace it with a null character and return.
     if (c == EOF || c == '\n') {
       buffer[position] = '\0';
@@ -263,7 +263,7 @@ what is this check ?? its like checking if system is not out of memory meaning n
 
 This part of code is for check EOF or new line , it is fairly simple , if it is EOF or \n then place an null terminator (\0) at the end of the sting which we have built , this is like an special charater which doesnt print but its an way to tell C that this is the end of sting
 
-```cpp
+```c
 // If we have exceeded the buffer, reallocate.
 if (position >= bufsize) {
   bufsize += LSH_RL_BUFSIZE;
@@ -279,4 +279,48 @@ I previously mentioned that we don't know how long is the command so we need dyn
 
 
 ## Spliting line so we can get args
+as we are just making an mini shell so we will be making it simple only , we'll just use whitespace (spaces, tabs, newlines) as our separators. We won't worry about quotes or backslashes. so basically our this function will tokinise commands like `ls -l /home` into "ls" , "-l" , "/home" and then end of list . but how will we know the separators ? like from where to separate and for that we predefine them as #define LSH_TOK_DELIM " \t\r\n\a".
 
+This code is fairly similar to the readline coz its kinda same logic like allocating memory for an array of pointers (here tokens) , and have an array of pointers (our tokens variable) that will act as a list of strings , allocate memory block to token , check if there is no allocation error. 
+
+```c 
+char **jeet_split_line(char *line){
+    int buffersize = JEET_TOK_BUFFER;
+    int postion = 0;
+
+    char **tokens = malloc(sizeof(char *) * buffersize);
+    char *token;
+
+    if(!tokens){
+        fprintf(stderr, "jeet says : Allocation error\n");
+        exit(EXIT_FAILURE);
+    }
+
+    token = strtok(line , JEET_TOK_DELIM);
+    while(token != NULL){
+        tokens[postion] = token;
+        postion++;
+
+        if(postion >= buffersize)
+        {
+            buffersize += JEET_TOK_BUFFER;
+            tokens = realloc(tokens, buffersize*sizeof(char *));
+
+            if(!tokens){
+                fprintf(stderr , "jeet says Allocation error\n");
+                exit(EXIT_FAILURE);
+            }
+        }
+
+        token = strtok(NULL , JEET_TOK_DELIM);   // contuning from where it left off
+
+    }
+
+    tokens[postion] = NULL;
+
+    return tokens;
+}
+```
+
+
+Here we have used `strtok()` and given line as its input what it will do it , it will find the first token and skiping any delimiters at the start. It returns a pointer to the beginning of that token (e.g., the 'l' in "ls"). there is an note to take that `strtok()` is destructive. It actually modifies your original line string. It finds the space after "ls" and replaces it with a null terminator (\0). This is how it "chops" the string. then we have an classic loop to keep tokiniszing until `strtok()` returns NULL 
