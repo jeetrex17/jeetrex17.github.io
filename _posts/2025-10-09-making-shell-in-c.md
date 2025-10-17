@@ -85,14 +85,14 @@ A way to check is to use `type`
 
 ## Life cycle of an shell 
 
-#### 1. Initialize 
+##### 1. Initialize 
 Its just like as name suggest its initializes like read config files , set environment variables ( $PATH , $HOME etc ) , set internal Data structures ( shell does need memory to store variables aliases , paths , fancy colors etc )
 
-#### 2. Interpret ( Main Loop )
+##### 2. Interpret ( Main Loop )
 this keeps it running till user exits it , its mainly parses the commands user types , keeps it active , keeps prompting that $ or > again and again 
 creates child process for commands using `fork()`, also waits for child process to get complete.
 
-#### 3. Terminate 
+##### 3. Terminate 
 exits the shell , free memory and resources like release buffers , close open files, etc
 
 
@@ -162,7 +162,7 @@ Now lets think why did we use `char **argv` only we could have also used `char *
 
 And then we have our main jeet_loop() and return statement that is , now lets move onto the loop part 
 
-##### Now lets discus the Main loop `jeet_loop` 
+#### Now lets discus the Main loop `jeet_loop` 
 Loop is the heart of this mini shell becomes it is what keep running it whole like keeps prompting that $ or > , reading lines , parsing etc.
 first here is the code for it then we will break it down in detail
 
@@ -194,5 +194,102 @@ Here we are using an simple do while and making sure our shell keeps saying > or
 Example of memory leak , lets say you allocated 1MB and then never free it and it is inside an loop then it will keep adding 1MB each time thus consuming all memory and making system slower. hence its best practice to free the memory.
 
 
+## Reading a line
+here we are gonna make an function which reads line as the user inputs it we gonna make whole ourself for learning purposes we are not gonna use getline or fgets , so for learning purposes we gonna make our own.
 
+So , it will be like we dont know how long is the command user is gonna type so we are first gonna allocate an memory block and if he exceeds that then we reallocate more memory to it 
+
+```> [!CAUTION]
+```c 
+char *read_jeet_line(void)
+{
+    int buffersize = JEET_RL_BUFFER;
+    int postion = 0;
+    char *buffer = malloc(sizeof(char) * buffersize);
+    int c;
+
+    if(!buffer){
+        fprintf(stderr, "jeet says : Allocation error\n");
+        exit(EXIT_FAILURE);
+    }
+
+    while(1){
+        c = getchar(); 
+        if(c == EOF || c == '\n'){
+            buffer[postion] = '\0';
+            return buffer;
+        }
+        else{
+            buffer[postion] = c;
+        }
+        postion++;
+
+
+        if(postion >= buffersize){
+            buffersize += JEET_RL_BUFFER;
+            buffer = realloc(buffer, buffersize);
+            
+            if(!buffer)
+            {
+                fprintf(stderr , "jeet says : Allocation error\n");
+                exit(EXIT_FAILURE);
+            }
+
+        }
+    }
+
+}
+```
+
+
+```
+```
+```
+
+we have an buffer as pointer which points to the memory where the text is getting stored , and the memory allocation is done by malloc , the postion is just for keeping track of charaters , then we have an infite loop where we are getting each charaters and why is c integer ?? its coz EOF is -1 so to check if we reached EOF ( end of file ) thus we are using int.
+
+```c 
+if (!buffer) {
+    fprintf(stderr, "Jeet: allocation error\n");
+    exit(EXIT_FAILURE);
+  }
+```
+
+what is this check ?? its like checking if system is not out of memory meaning no more memory to allocate and then buffer will be NULL and thus !NULL is true it will say allocation error and exit.
+
+```> [!CAUTION]
+```c
+// If we hit EOF, replace it with a null character and return.
+    if (c == EOF || c == '\n') {
+      buffer[position] = '\0';
+      return buffer;
+    } else {
+      buffer[position] = c;
+    }
+    position++;
+
+
+```
+```
+
+This part of code is for check EOF or new line , it is fairly simple , if it is EOF or \n then place an null terminator (\0) at the end of the sting which we have built , this is like an special charater which doesnt print but its an way to tell C that this is the end of sting
+
+```c 
+// If we have exceeded the buffer, reallocate.
+    if (position >= bufsize) {
+      bufsize += LSH_RL_BUFSIZE;
+      buffer = realloc(buffer, bufsize);
+      if (!buffer) {
+        fprintf(stderr, "Jeet: allocation error\n");
+        exit(EXIT_FAILURE);
+      }
+    }
+  }
+}
+```
+
+I previously mentioned that we don't know how long is the command so we need dynamic memory allocation thus we check if the Postion which exceeds the buffersize then we reallocate the memory via realloc , and after reallocation we again check if system is out of memory or not coz we just have reallocated more memory. now we will move on to the split line or parsing line function 
+
+
+## Spliting line so we can get args
 
