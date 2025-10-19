@@ -323,4 +323,145 @@ char **jeet_split_line(char *line){
 ```
 
 
-Here we have used `strtok()` and given line as its input what it will do it , it will find the first token and skiping any delimiters at the start. It returns a pointer to the beginning of that token (e.g., the 'l' in "ls"). there is an note to take that `strtok()` is destructive. It actually modifies your original line string. It finds the space after "ls" and replaces it with a null terminator (\0). This is how it "chops" the string. then we have an classic loop to keep tokiniszing until `strtok()` returns NULL 
+Here we have used `strtok()` and given line as its input what it will do it , it will find the first token and skiping any delimiters at the start. It returns a pointer to the beginning of that token (e.g., the 'l' in "ls"). there is an note to take that `strtok()` is destructive. It actually modifies your original line string. It finds the space after "ls" and replaces it with a null terminator (\0). This is how it "chops" the string. then we have an classic loop to keep tokiniszing until `strtok()` returns NULL , you may wonder like why in first we gave line as input in `strtok()` and then we gave NULL , its coz strtok only give one token at a time and then we pass NULL in an loop to loop through whole string.
+
+
+## Launching Processes: The Heart of Our Shell
+Okay, we've read a line, we've split it into arguments now what? Now we get to the real job of a shell that is actually running the command.
+This part is the "magic" of how shells work, and it's all built on a three-step process.
+
+-`fork()` - You clone your process.
+-`exec()` - The clone (child) replaces itself with the new program.
+-`wait()` - The original (parent) waits for the clone to finish.
+
+```c
+int jeet_launch(char **args){
+    pid_t pid , wpid; // if pid = 0 its running child process , if pid > 0 then parrent else error 
+    int status;
+
+    pid = fork();
+    if(pid == 0){   //child process 
+        if (execvp(args[0], args) == -1){
+            perror("jeet");
+        }
+        exit(EXIT_FAILURE);
+    }
+    else if(pid < 0){
+        // error while forking
+        perror("jeet");
+    }
+    else{
+        do {
+            wpid = waitpid(pid , &status, WUNTRACED);
+        } while(!WIFEXITED(status) && !WIFSIGNALED(status));
+    }
+
+    return 1;
+}
+```
+```
+
+
+```
+### 1. `fork()` cloning the parent
+First, we need to run a new command (like ls) without killing our shell. If our shell just ran ls, our shell program would be gone! the solution is simple use `**fork()**` , The operating system creates an exact duplicate of our shell process. The original process is called **parent** and the duplicate one is called the **child** process and we will run the commands in the child process and to do that we will use `**exec()**`
+
+### 2. `exec()` Replacing the child process
+after calling `fork()` the child process is running the shell as well but we don't it to run shell we want to run the command which the user wants. So, the child process uses exec(). This function does one thing that is it replaces the entire current process with a new program.
+The most important thing to know about exec is that **it never returns**
+
+### 3. `wait()` wait till exec is over 
+we dont want to spam the user with the > or $ sign coz the parent process is also running as well the child ( where the command will run ) so we need to use wait till child process is completed , or this, we use `waitpid()`. This tells the OS, "Hey, pause my (the parent's) execution. Just let me know when the child process (PID pid) finishes its job.
+
+| `pid` Value | Who Am I? | What Does It Mean? | My Job Is To... |
+| :--- | :--- | :--- | :--- |
+| `pid == 0` | **Child** | "You are the newly created process." | `exec()` (run the new command) |
+| `pid > 0` | **Parent** | "A child was created. Its ID is `pid`." | `wait()` (wait for the child to finish) |
+| `pid < 0` | **Parent** | "Error: No child was created." | `perror()` (report the error) |
+
+
+`execvp()`: Why execvp? The exec family has many functions.
+The 'v' (execv...) means it takes an array (a vector) of arguments, which is perfect for our args array.
+The 'p' (exec...p) means it will search the system PATH for the command. This lets us type ls instead of having to know the full path /bin/ls.
+
+The `waitpid()` Loop: Why a do...while loop? We want to wait until the child is truly finished. A process can be stopped (like with Ctrl+Z) and then continued later. This loop ensures we only stop waiting when the child has exited (WIFEXITED) or been signaled to terminate (WIFSIGNALED)
+
+## builtin commands
+We have already learnt what builtin and external commands, builtin commands don't run in the child process inshort they don't follow that fork exec. Builtins are commands that the shell runs itself, inside its own process, without using `fork()` , and why is that ? lets understand it with an simple example of `ls` and `cd` , when we do `cd` we want to change our working directory and ls is just list the files , so lets say we use that fork exec way for `cd` then it will run in the child process and once child process and nothing happens in the parent process ( our shell ) so basically the working directory will remain unchanged. so i think you can get why we need builtin commands
+
+```c 
+// making bultin functions
+
+int jeet_cd(char **args);
+int jeet_help(char **args);
+int jeet_exit(char **args);
+
+char *builtin_str[] = {
+    "cd", "help" , "exit"
+};
+
+int (*builtin_func[])(char **) = {
+    &jeet_cd,
+    &jeet_help,
+    &jeet_exit
+};
+
+
+int jeet_num_builtin(){
+    return (sizeof(builtin_func) / sizeof(char *));
+}
+
+
+// now implementing the builting func cd help and exit 
+
+int jeet_cd(char **args){
+    if(args[1] == NULL){
+        fprintf(stderr , "Taking u back to HOME\n");
+
+        if(chdir(getenv("HOME")) != 0){
+            perror("jeet");
+        }
+    }
+    else { // here we will call chdir() a system call in child process
+        if(chdir(args[1]) != 0){
+            perror("jeet\n");
+        }
+    }
+
+    return 1;
+}
+
+int jeet_help(char **args) {
+    int n = jeet_num_builtin();
+    printf(
+        "    ____. _________ ___ ______________.____    .____     \n"
+        "   |    |/   _____//   |   \\_   _____/|    |   |    |    \n"
+        "   |    |\\_____  \\/    ~    \\    __)_ |    |   |    |    \n"
+        " /\\__|    |/        \\    Y    /        \\|    |___|    |___ \n"
+        " \\________/_______  /\\___|_  /_______  /|_______ \\_______ \\\n"
+        "                  \\/       \\/        \\/         \\/       \\/\n"
+        "\n"
+        "         Welcome to J shell\n"
+        "------------------------------------------------------\n"
+        "Built-ins: %d\n"
+        "  cd    : change directory\n"
+        "  help  : show this message\n"
+        "  exit  : exit the shell\n"
+        "\n",
+        n
+    );
+
+    return 1;
+}
+
+int jeet_exit(char **args){
+    printf("Bye - ciao - vale - αντίο - tchau - au revoir\n");
+    return 0;
+}
+```
+
+
+
+```
+```
+```
