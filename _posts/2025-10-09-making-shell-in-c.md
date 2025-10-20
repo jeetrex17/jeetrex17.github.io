@@ -533,17 +533,9 @@ int jeet_execute(char **args)
 
 #### Let's break it down:
 
-This function is just a simple, prioritized checklist:
+This function's logic is simple:
 
-1.  **Is it an empty command?** The `if (args[0] == NULL)` check is a safety net. If the user just hits `Enter`, our `jeet_split_line` function will (or should) return `args` where `args[0]` is `NULL`. This `if` statement catches that, does nothing, and returns `1`. A return value of `1` (or any non-zero value for `status`) tells our `do...while (status)` loop to keep going.
-
-2.  **Is it a builtin command?** This is the main part. The `for` loop iterates from `i = 0` to the total number of builtins we have (`jeet_num_builtin()`).
-    * Inside the loop, `strcmp(args[0], builtin_str[i])` compares the user's command (e.g., "cd") to the names in our list ("cd", "help", "exit").
-    * If `strcmp` returns `0`, it's a match!
-    * We then immediately call the matching function from our *other* array: `(*builtin_func[i])(args)`. This uses the function pointer at that same index `i` (e.g., `&jeet_cd`) and runs it.
-    * Notice that `jeet_cd` and `jeet_help` return `1` (to continue the loop), while `jeet_exit` returns `0`, which will stop the `do...while` loop and terminate the shell.
-
-3.  **If not... it must be an external program.** If the `for` loop finishes all its iterations and *doesn't* find a match, the `return` statement inside the loop is never hit. This means the command isn't a builtin. The code "falls through" to the very last line: `return jeet_launch(args);`.
-    * This is the "default" or "fallback" action. If it's not one of *our* special commands, we assume it's an external program and let `jeet_launch` handle the whole `fork`/`exec`/`wait` process we built earlier.
-
+First, it checks if the command is empty (`args[0] == NULL`). If the user just hit Enter, it returns `1` to tell the main loop to continue.
+If there is a command, it loops through our list of builtins ("cd", "help", "exit"). If it finds a match, it runs the corresponding function (like `jeet_cd`) and returns.
+If the loop finishes and finds no match, it means the command isnt a builtin. In that case, it just calls `jeet_launch` to run it as an external program.
 
