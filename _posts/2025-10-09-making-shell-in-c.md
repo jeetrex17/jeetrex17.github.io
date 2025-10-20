@@ -196,7 +196,7 @@ here we are gonna make an function which reads line as the user inputs it we gon
 So , it will be like we dont know how long is the command user is gonna type so we are first gonna allocate an memory block and if he exceeds that then we reallocate more memory to it 
 
 ```c 
-char *read_jeet_line(void)
+char *jeet_read_line(void)
 {
     int buffersize = JEET_RL_BUFFER;
     int postion = 0;
@@ -266,7 +266,7 @@ This part of code is for check EOF or new line , it is fairly simple , if it is 
 ```c
 // If we have exceeded the buffer, reallocate.
 if (position >= bufsize) {
-  bufsize += LSH_RL_BUFSIZE;
+  bufsize += JEET_RL_BUFFER;
   buffer = realloc(buffer, bufsize);
   if (!buffer) {
     fprintf(stderr, "Jeet: allocation error\n");
@@ -279,7 +279,7 @@ I previously mentioned that we don't know how long is the command so we need dyn
 
 
 ## Spliting line so we can get args
-as we are just making an mini shell so we will be making it simple only , we'll just use whitespace (spaces, tabs, newlines) as our separators. We won't worry about quotes or backslashes. so basically our this function will tokinise commands like `ls -l /home` into "ls" , "-l" , "/home" and then end of list . but how will we know the separators ? like from where to separate and for that we predefine them as #define LSH_TOK_DELIM " \t\r\n\a".
+as we are just making an mini shell so we will be making it simple only , we'll just use whitespace (spaces, tabs, newlines) as our separators. We won't worry about quotes or backslashes. so basically our this function will tokinise commands like `ls -l /home` into "ls" , "-l" , "/home" and then end of list . but how will we know the separators ? like from where to separate and for that we predefine them as #define JEET_TOK_DELIM " \t\r\n\a".
 
 This code is fairly similar to the readline coz its kinda same logic like allocating memory for an array of pointers (here tokens) , and have an array of pointers (our tokens variable) that will act as a list of strings , allocate memory block to token , check if there is no allocation error. 
 
@@ -413,7 +413,7 @@ int jeet_num_builtin(){
 
 int jeet_cd(char **args){
     if(args[1] == NULL){
-        fprintwf(stderr , "Taking u back to HOME\n");
+        fprintf(stderr , "Taking u back to HOME\n");
         
 
         if(chdir(getenv("HOME")) != 0){
@@ -422,7 +422,7 @@ int jeet_cd(char **args){
     }
     else {
         if(chdir(args[1]) != 0){
-            perror("jeet\n");
+            perror("jeet");
         }
     }
 
@@ -538,3 +538,7 @@ First, it checks if the command is empty (`args[0] == NULL`). If the user just h
 If there is a command, it loops through our list of builtins ("cd", "help", "exit"). If it finds a match, it runs the corresponding function (like `jeet_cd`) and returns.
 
 If the loop finishes and finds *no match*, it means the command isn't a builtin. In that case, it just calls `jeet_launch` to run it as an external program.
+
+
+
+**Thanks for reading it , hope this helps anyone who wanna learn , here it the [Github rpeo](https://github.com/jeetrex17/Mini_shell_in_c) for this project as well , and if any of the point or part contains misinformation pls contact me on [X](https://x.com/JeetRex) i will fix it ASAP.**
