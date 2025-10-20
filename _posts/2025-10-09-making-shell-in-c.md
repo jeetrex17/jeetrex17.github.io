@@ -512,10 +512,9 @@ int jeet_execute(char **args)
 {
   int i;
 
-  // First, check if the user just pressed enter
+  // checking if pressed enter
   if (args[0] == NULL) {
-    // An empty command was entered.
-    return 1; // 1 means "keep looping"
+    return 1;
   }
 
   // If not empty, loop through our builtins
@@ -546,3 +545,5 @@ This function is just a simple, prioritized checklist:
 
 3.  **If not... it must be an external program.** If the `for` loop finishes all its iterations and *doesn't* find a match, the `return` statement inside the loop is never hit. This means the command isn't a builtin. The code "falls through" to the very last line: `return jeet_launch(args);`.
     * This is the "default" or "fallback" action. If it's not one of *our* special commands, we assume it's an external program and let `jeet_launch` handle the whole `fork`/`exec`/`wait` process we built earlier.
+
+
