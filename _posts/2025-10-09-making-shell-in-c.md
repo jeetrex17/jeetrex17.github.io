@@ -531,9 +531,9 @@ int jeet_execute(char **args)
   return jeet_launch(args);
 }
 
-#### Let's break it down:
+#### Lets break it down:
 
-This function's logic is simple:
+This functions logic is simple:
 
 First, it checks if the command is empty (`args[0] == NULL`). If the user just hit Enter, it returns `1` to tell the main loop to continue.
 If there is a command, it loops through our list of builtins ("cd", "help", "exit"). If it finds a match, it runs the corresponding function (like `jeet_cd`) and returns.
