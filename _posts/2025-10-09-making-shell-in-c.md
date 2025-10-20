@@ -359,10 +359,7 @@ int jeet_launch(char **args){
     return 1;
 }
 ```
-```
 
-
-```
 ### 1. `fork()` cloning the parent
 First, we need to run a new command (like ls) without killing our shell. If our shell just ran ls, our shell program would be gone! the solution is simple use `**fork()**` , The operating system creates an exact duplicate of our shell process. The original process is called **parent** and the duplicate one is called the **child** process and we will run the commands in the child process and to do that we will use `**exec()**`
 
@@ -416,13 +413,14 @@ int jeet_num_builtin(){
 
 int jeet_cd(char **args){
     if(args[1] == NULL){
-        fprintf(stderr , "Taking u back to HOME\n");
+        fprintwf(stderr , "Taking u back to HOME\n");
+        
 
         if(chdir(getenv("HOME")) != 0){
             perror("jeet");
         }
     }
-    else { // here we will call chdir() a system call in child process
+    else {
         if(chdir(args[1]) != 0){
             perror("jeet\n");
         }
@@ -460,8 +458,91 @@ int jeet_exit(char **args){
 }
 ```
 
+Now , we need to make an loop up table for the builtin function so like when an user types an commands and it checks if its an builtin commands or not , we can use an if else block if we want like this :
+
+```c 
+if (strcmp(args[0], "cd") == 0) {
+  return jeet_cd(args);
+} else if (strcmp(args[0], "help") == 0) {
+  return jeet_help(args);
+} else if (strcmp(args[0], "exit") == 0) {
+  return jeet_exit(args);
+} else {
+  return jeet_launch(args);
+}
+``` 
 
 
-```
-```
-```
+this will most definatly work but its just hard to maintain and looks bad , every time you make an new builtin function you will need to add another if else block , so its solution is an A lookup table with Pointers. We'll have two arrays: one with the command names and one with the functions they point to.
+
+#### what is forward Declarations ?
+these lines you see at top , which looks like an function Declarations those are forward Declarations. We are about to create an array of functions (builtin_func) that uses these names.By declaring them at the top, we're telling the C compiler, "Trust me bro these functions exist. Trust me for now, and I'll define them later. 
+
+then we have the **builtin_str[]** , its like an box which holds pointer to actual strings "cd" , "help" , "exit" , now to a bit confusing part the **Function Pointer Array** The syntax is bit confusing not bit its very confusing atleast it was for me , so that is basically an : An array of pointers, named builtin_func, where each pointer points to a function that takes a char ** as an argument and returns an int. i hope it clears things in simple manner 
+
+| `builtin_str` (The "Keys") | `builtin_func` (The "Values") |
+| :--- | :--- |
+| `[0]` &rarr; `"cd"` | `[0]` &rarr; (Pointer to `jeet_cd` function) |
+| `[1]` &rarr; `"help"` | `[1]` &rarr; (Pointer to `jeet_help` function) |
+| `[2]` &rarr; `"exit"` | `[2]` &rarr; (Pointer to `jeet_exit` function) |
+
+
+After all this i have just declared those built in commands ( cd , help , exit) that is fairly simple maybe look the cd one up for like those `chdir()` and `getenv()` .
+
+## Last piece 
+Okay, we've done all the hard parts.
+* We have a `jeet_loop` that reads, parses, and executes.
+* We have `jeet_read_line` to get user input.
+* We have `jeet_split_line` to tokenize that input.
+* We have `jeet_launch` to run external programs like `ls`.
+* And we just built our `jeet_cd`, `jeet_help`, and `jeet_exit` builtins, along with the lookup tables (`builtin_str` and `builtin_func`).
+
+But... how does our loop know *which* one to call? How does it decide between running `jeet_cd` (a builtin) and `jeet_launch` (for an external command)?
+
+That's the job of the `jeet_execute()` function. It's the "traffic cop" of our shell. Our `jeet_loop` calls it, and `jeet_execute` is responsible for routing the command to the right place.
+
+Thanks to all the setup we did, this function is actually super simple.
+
+### The `jeet_execute()` Function
+
+Here's the code. This is the final function that connects our builtin system to our process-launching system.
+
+```c
+int jeet_execute(char **args)
+{
+  int i;
+
+  // First, check if the user just pressed enter
+  if (args[0] == NULL) {
+    // An empty command was entered.
+    return 1; // 1 means "keep looping"
+  }
+
+  // If not empty, loop through our builtins
+  for (i = 0; i < jeet_num_builtin(); i++) {
+    // Compare the command to our list of builtin names
+    if (strcmp(args[0], builtin_str[i]) == 0) {
+      // If it's a match, run the BUILTIN function
+      return (*builtin_func[i])(args);
+    }
+  }
+
+  // If the loop finishes, it's NOT a builtin.
+  // So, run it as an EXTERNAL program.
+  return jeet_launch(args);
+}
+
+#### Let's break it down:
+
+This function is just a simple, prioritized checklist:
+
+1.  **Is it an empty command?** The `if (args[0] == NULL)` check is a safety net. If the user just hits `Enter`, our `jeet_split_line` function will (or should) return `args` where `args[0]` is `NULL`. This `if` statement catches that, does nothing, and returns `1`. A return value of `1` (or any non-zero value for `status`) tells our `do...while (status)` loop to keep going.
+
+2.  **Is it a builtin command?** This is the main part. The `for` loop iterates from `i = 0` to the total number of builtins we have (`jeet_num_builtin()`).
+    * Inside the loop, `strcmp(args[0], builtin_str[i])` compares the user's command (e.g., "cd") to the names in our list ("cd", "help", "exit").
+    * If `strcmp` returns `0`, it's a match!
+    * We then immediately call the matching function from our *other* array: `(*builtin_func[i])(args)`. This uses the function pointer at that same index `i` (e.g., `&jeet_cd`) and runs it.
+    * Notice that `jeet_cd` and `jeet_help` return `1` (to continue the loop), while `jeet_exit` returns `0`, which will stop the `do...while` loop and terminate the shell.
+
+3.  **If not... it must be an external program.** If the `for` loop finishes all its iterations and *doesn't* find a match, the `return` statement inside the loop is never hit. This means the command isn't a builtin. The code "falls through" to the very last line: `return jeet_launch(args);`.
+    * This is the "default" or "fallback" action. If it's not one of *our* special commands, we assume it's an external program and let `jeet_launch` handle the whole `fork`/`exec`/`wait` process we built earlier.
