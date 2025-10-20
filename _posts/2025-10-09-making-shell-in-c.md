@@ -497,10 +497,8 @@ Okay, we've done all the hard parts.
 * We have `jeet_launch` to run external programs like `ls`.
 * And we just built our `jeet_cd`, `jeet_help`, and `jeet_exit` builtins, along with the lookup tables (`builtin_str` and `builtin_func`).
 
-But... how does our loop know *which* one to call? How does it decide between running `jeet_cd` (a builtin) and `jeet_launch` (for an external command)?
-
-That's the job of the `jeet_execute()` function. It's the "traffic cop" of our shell. Our `jeet_loop` calls it, and `jeet_execute` is responsible for routing the command to the right place.
-
+But... how does our loop know which one to call? How does it decide between running `jeet_cd` (a builtin) and `jeet_launch` (for an external command)?
+That's the job of the `jeet_execute()` function. Our `jeet_loop` calls it, and `jeet_execute` is responsible for routing the command to the right place.
 Thanks to all the setup we did, this function is actually super simple.
 
 ### The `jeet_execute()` Function
@@ -512,9 +510,10 @@ int jeet_execute(char **args)
 {
   int i;
 
-  // checking if pressed enter
+  // First, check if the user just pressed enter
   if (args[0] == NULL) {
-    return 1;
+    // An empty command was entered.
+    return 1; // 1 means "keep looping"
   }
 
   // If not empty, loop through our builtins
@@ -530,12 +529,12 @@ int jeet_execute(char **args)
   // So, run it as an EXTERNAL program.
   return jeet_launch(args);
 }
-
-#### Lets break it down:
-
-This functions logic is simple:
+```
+#### Let's break it down:
+This function's logic is simple:
 
 First, it checks if the command is empty (`args[0] == NULL`). If the user just hit Enter, it returns `1` to tell the main loop to continue.
-If there is a command, it loops through our list of builtins ("cd", "help", "exit"). If it finds a match, it runs the corresponding function (like `jeet_cd`) and returns.
-If the loop finishes and finds no match, it means the command isnt a builtin. In that case, it just calls `jeet_launch` to run it as an external program.
 
+If there is a command, it loops through our list of builtins ("cd", "help", "exit"). If it finds a match, it runs the corresponding function (like `jeet_cd`) and returns.
+
+If the loop finishes and finds *no match*, it means the command isn't a builtin. In that case, it just calls `jeet_launch` to run it as an external program.
