@@ -25,10 +25,6 @@ order: 2
     border-radius: 3px;
     font-size: 0.85em;
   }
-  .project-grid .badge.bg-secondary {
-    background-color: var(--mask-bg) !important;
-    color: var(--text-muted-color, var(--text-color));
-  }
 </style>
 
 Things I've built or am building. More to come as I learn.
@@ -39,39 +35,13 @@ Things I've built or am building. More to come as I learn.
   <div class="col">
     <div class="card h-100 shadow-sm">
       <div class="card-body">
-        <h5 class="card-title">🐚 Mini Shell in C</h5>
+        <h5 class="card-title">Mini Shell in C</h5>
         <p class="card-text">A minimal Unix-like shell built from scratch in C — implements <code>fork</code>, <code>exec</code>, <code>wait</code>, and a few built-ins (<code>cd</code>, <code>help</code>, <code>exit</code>).</p>
         <p class="card-text"><small class="text-muted">C · systems · Linux</small></p>
       </div>
       <div class="card-footer bg-transparent border-0">
-        <a href="https://github.com/jeetrex17/Mini_shell_in_c" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/jeetrex17/Mini_shell_in_c" class="btn btn-outline-secondary btn-sm" target="_blank" rel="noopener">GitHub</a>
         <a href="/posts/making-shell-in-c/" class="btn btn-outline-secondary btn-sm">Write-up</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="col">
-    <div class="card h-100 shadow-sm">
-      <div class="card-body">
-        <h5 class="card-title">🧮 Order Book Simulator <small class="text-muted">— WIP</small></h5>
-        <p class="card-text">A toy limit-order-book matching engine in C++. Goal: understand how exchanges match buys/sells under the hood, then measure latency.</p>
-        <p class="card-text"><small class="text-muted">C++ · finance · low-latency</small></p>
-      </div>
-      <div class="card-footer bg-transparent border-0">
-        <span class="badge bg-secondary">coming soon</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="col">
-    <div class="card h-100 shadow-sm">
-      <div class="card-body">
-        <h5 class="card-title">🧠 Memory Allocator from Scratch <small class="text-muted">— WIP</small></h5>
-        <p class="card-text">A custom <code>malloc</code> / <code>free</code> implementation in C using <code>sbrk</code> and a free list. Notes coming after I finish reading <em>CSAPP</em>.</p>
-        <p class="card-text"><small class="text-muted">C · systems · memory</small></p>
-      </div>
-      <div class="card-footer bg-transparent border-0">
-        <span class="badge bg-secondary">coming soon</span>
       </div>
     </div>
   </div>
