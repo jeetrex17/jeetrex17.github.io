@@ -1,6 +1,6 @@
 ---
 title: "Why Rotating in 3D Requires Numbers That Live in 4D"
-date: 2026-05-29
+date: 2026-05-15
 categories: [Robotics, Math]
 tags: [robotics, linear-algebra, quaternions, drone, complex-numbers]
 layout: post
