@@ -1,6 +1,6 @@
 ---
 title: "What Does \"Forward\" Even Mean to a Drone?"
-date: 2026-05-28
+date: 2026-05-08
 categories: [Robotics, Math]
 tags: [robotics, linear-algebra, coordinate-frames, drone]
 layout: post
