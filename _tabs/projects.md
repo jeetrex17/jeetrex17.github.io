@@ -13,6 +13,7 @@ order: 2
   .project-grid .card-footer {
     background-color: transparent;
     border-top: 1px solid var(--main-border-color, rgba(128, 128, 128, 0.15));
+    padding: 0.75rem var(--bs-card-spacer-x, 1rem);
   }
   .project-grid .card-title,
   .project-grid .card-text {
@@ -26,6 +27,8 @@ order: 2
     font-size: 0.85em;
   }
   .project-grid .project-links {
+    align-items: center;
+    display: flex;
     font-size: 0.85em;
   }
   .project-grid .project-links a {
@@ -55,7 +58,7 @@ Things I've built or am building. More to come as I learn.
         <p class="card-text">A minimal Unix-like shell built from scratch in C — implements <code>fork</code>, <code>exec</code>, <code>wait</code>, and a few built-ins (<code>cd</code>, <code>help</code>, <code>exit</code>).</p>
         <p class="card-text"><small class="text-muted">C · systems · Linux</small></p>
       </div>
-      <div class="card-footer bg-transparent border-0 pt-0 project-links">
+      <div class="card-footer bg-transparent project-links">
         <a href="https://github.com/jeetrex17/Mini_shell_in_c" target="_blank" rel="noopener">GitHub</a>
         <span class="sep">·</span>
         <a href="/posts/making-shell-in-c/">Write-up</a>
