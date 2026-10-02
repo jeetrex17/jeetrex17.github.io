@@ -180,4 +180,4 @@ Key takeaways :
 
 Next post will probably be on quaternions because they deserve their own thing , the 4 number thing is still slightly magical to me even after watching the 3Blue1Brown video on it.
 
-**Thanks for reading , if anything here is wrong pls ping me on [X](https://x.com/JeetRex) and I will fix it.**
+**Thanks for reading.**

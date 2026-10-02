@@ -541,4 +541,4 @@ If the loop finishes and finds *no match*, it means the command isn't a builtin.
 
 
 
-**Thanks for reading it , hope this helps anyone who wanna learn , here it the [Github rpeo](https://github.com/jeetrex17/Mini_shell_in_c) for this project as well , and if any of the point or part contains misinformation pls contact me on [X](https://x.com/JeetRex) i will fix it ASAP.**
+**Thanks for reading. Hope this helps anyone who wants to learn. Here is the [GitHub repo](https://github.com/jeetrex17/Mini_shell_in_c) for this project.**

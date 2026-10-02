@@ -241,4 +241,4 @@ And now, finally, the drone *knows* which way is up, reliably, even while moving
 - [NASA TM 86847, Discovery of the Kalman Filter as a Practical Tool for Aerospace and Industry](https://ntrs.nasa.gov/citations/19860003843), the actual NASA history of how Schmidt's team adapted the filter for Apollo. A lovely read.
 - [Joan Solà, Quaternion Kinematics for the Error-State Kalman Filter](https://arxiv.org/abs/1711.02508), the gold-standard derivation of everything in this post, done properly. Heavy but worth it if you want to build your own.
 
-**Thanks for reading. NASA trusted this thing to find the Moon, I am just trusting it to find which way is up, so if I got anything wrong pls ping me on [X](https://x.com/JeetRex) and I will fix it.**
+**Thanks for reading. NASA trusted this thing to find the Moon; I am just trusting it to find which way is up.**

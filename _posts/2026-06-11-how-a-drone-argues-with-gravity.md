@@ -423,4 +423,4 @@ Next step would be tuning it better, or testing how it behaves when the target m
 - [Brett Beauregard, Improving the Beginner's PID](https://brettbeauregard.com/blog/2011/04/improving-the-beginners-pid-introduction/), a very clear practical PID series.
 - [Astrom and Murray, Feedback Systems](https://www.cds.caltech.edu/~murray/amwiki/index.php/Main_Page), the more rigorous textbook version, if you want the deeper math.
 
-**Thanks for reading. If I got a controller detail wrong pls ping me on [X](https://x.com/JeetRex) and I will fix it.**
+**Thanks for reading.**

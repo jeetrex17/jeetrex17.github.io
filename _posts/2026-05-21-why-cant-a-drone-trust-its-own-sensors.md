@@ -212,4 +212,4 @@ But here is the hopeful bit, and the reason the next post exists. The two sensor
 
 One is useful where the other is weak. So what if you could blend them, trusting the gyro for the quick stuff and gently correcting its drift using the accelerometer's long-term honesty? You can. The tool that does it is called a **Kalman filter**, and figuring out how it fuses two lying sensors into one estimate you can actually trust is the whole next post.
 
-**Thanks for reading, this one was all about why sensors are honest liar, so if I got anything wrong pls ping me on [X](https://x.com/JeetRex) and I will fix it.**
+**Thanks for reading. This one was all about why sensors are honest liars.**

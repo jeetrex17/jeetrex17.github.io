@@ -449,4 +449,4 @@ If you want to go deeper:
 - [Joan Sola, Quaternion Kinematics for the Error-State Kalman Filter](https://arxiv.org/abs/1711.02508), the gold standard reference if you want to write your own MEKF later. Heavy but thorough.
 - [ETH Zurich, An Introduction to 3D Orientations and Quaternions](https://ethz.ch/content/dam/ethz/special-interest/mavt/robotics-n-intelligent-systems/asl-dam/documents/lectures/robot_dynamics/RD2_Quaternions.pdf), a free PDF from the ETH robot dynamics course. Derivation-heavy and written for a robotics audience, so it will feel familiar after this post.
 
-**Thanks for reading, this was a long one and the math is dense, so if I got anything wrong pls ping me on [X](https://x.com/JeetRex) and I will fix it.**
+**Thanks for reading. This was a long one, and the math is dense.**

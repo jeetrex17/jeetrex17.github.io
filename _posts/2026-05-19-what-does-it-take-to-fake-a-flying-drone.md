@@ -525,4 +525,4 @@ If I have done my job, the phrase "Newton-Euler dynamics with RK4 integration" n
 - [Percy Jaiswal, Demystifying Drone Dynamics](https://medium.com/data-science/demystifying-drone-dynamics-ee98b1ba882f), same article I borrowed the frames figure from in post one, covers the dynamics with nice visuals.
 - [Wikipedia, Runge-Kutta methods](https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods), goes much deeper into why the 1-2-2-1 weighting works, including the general Butcher tableau if you want to see RK4's whole extended family.
 
-**Thanks for reading, this one was heavy on physics, so if I got anything wrong pls ping me on [X](https://x.com/JeetRex) and I will fix it.**
+**Thanks for reading. This one was heavy on physics.**
