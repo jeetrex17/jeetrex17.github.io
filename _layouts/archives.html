@@ -22,11 +22,11 @@ layout: page
     {% endif %}
 
     <li>
-      {% assign ts = post.date | date: '%s' %}
-      <span class="date day" data-ts="{{ ts }}" data-df="DD">{{ post.date | date: '%d' }}</span>
-      <span class="date month small text-muted ms-1" data-ts="{{ ts }}" data-df="{{ df_dayjs_m }}">
+      {% assign post_datetime = post.date | date_to_xmlschema %}
+      <time class="date day" datetime="{{ post_datetime }}" data-df="DD">{{ post.date | date: '%d' }}</time>
+      <time class="date month small text-muted ms-1" datetime="{{ post_datetime }}" data-df="{{ df_dayjs_m }}">
         {{ post.date | date: df_strftime_m }}
-      </span>
+      </time>
       <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
     </li>
 
